@@ -1,0 +1,71 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+{{listing_obj.id}}:{{ listing_obj.name }}
+{% endblock %}
+
+{% block body %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+<p><img src="{{ listing_obj.image_url }}"></p>
+<style>
+    .drelement{
+        display: inline-block
+    }
+</style>
+<div class="dv">
+{% for f in listing_obj.get_all_fields %}
+<div class="dr" display="grid">
+ <label for="{{ f.label }}" class="drelement detailvaluelabel"><dt> {{f.label|capfirst}}</dt></label>
+    <div class="drelement detailseparator">:</div>
+    <div class="drelement detailvalue">
+      {{f.value|escape|urlize|linebreaks}}
+    </div>
+</div>
+{% endfor %}
+</div>
+{% if user.is_authenticated and listing_obj.status == "A" %}
+    <p>
+        {% if listingOnUserWatchList %}
+        <form action="{% url 'remove_watchlist'%}" method="post">
+            {% csrf_token %}
+            <input type="text" name="id" value="{{listing_obj.id}}" hidden>
+            <button> Remove from Watchlist </button>
+        </form>
+        {% else %}
+        <form action="{% url 'add_watchlist'%}" method="post">
+            {% csrf_token %}
+            <input type="text" name="id" value="{{listing_obj.id}}" hidden>
+            <button> Add to Watchlist </button>
+        </form>
+        {% endif %}
+    </p>
+    <p>
+        {% if user == listing_obj.created_by %}
+            <a href="/listing/{{listing_obj.id}}/close-bid/">Close bid</a>
+        {% else %}
+        <form action="{% url 'submit_bid'%}" method="post">
+            {% csrf_token %}
+            {{ bid_form }}
+            <button type="submit">Bid</button>
+        </form>
+        {% endif %}
+    </p>
+{% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
+    You are the winner!!!
+{% endif %}
+
+<form action="{% url 'post_comment'%}" method="post">
+        {% csrf_token %}
+        {{ comment_form }}
+        <button type="submit">comment</button>
+</form>
+{% for comment in listing_obj.comments_listing.all %}
+    {{ comment }}
+{% endfor %}
+{% endblock %}

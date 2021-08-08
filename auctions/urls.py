@@ -1,4 +1,4 @@
-import listview as listview
+# import listview as listview
 from django.urls import path
 
 from . import views

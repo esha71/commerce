@@ -47,7 +47,7 @@ class ListingForm(ModelForm):
 
 class CommentsForm(ModelForm):
     listing_id = forms.CharField(widget=forms.HiddenInput(), required=False)
-    created_by = forms.CharField(disabled=True, required=False)
+    created_by = forms.CharField(widget=forms.HiddenInput(), disabled=True, required=False  )
 
     class Meta:
         model = Comments
@@ -83,6 +83,8 @@ class BidForm(ModelForm):
                 new_high_bid = True
         return new_high_bid
 
+
+@login_required(login_url='login')
 def new_listing(request):
     if request.method == 'POST':
         # save the page_name and description
@@ -96,7 +98,7 @@ def new_listing(request):
         else:
             pass
     else:
-        form = ListingForm(auto_id=False)
+        form = ListingForm(auto_id=True)
     return render(request, "listings/form.html", {
         "form": form
     })
@@ -112,12 +114,7 @@ def view_listing(request, listing_id):
                 listingOnUserWatchList = True
             except Watchlist.DoesNotExist:
                 listingOnUserWatchList = False
-        # bid_form = BidForm(initial={"listing_id": listing_obj.id, 'listing_on_watchlist': listingOnUserWatchList})
-        # return render(request, html_pages['listing_view'], {
-        #     "listingOnUserWatchList": listingOnUserWatchList,
-        #     "listing_obj": listing_obj,
-        #     "bid_form": bid_form,
-        # })
+
         return render_detail_listing(request, listingOnUserWatchList, listing_obj)
     except Listing.DoesNotExist:
             return render(request, html_pages['message_view'], {

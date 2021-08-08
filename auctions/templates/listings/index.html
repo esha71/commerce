@@ -5,11 +5,40 @@
 {% endblock %}
 
 {% block body %}
+<head>
+    <style>
+        img{
+            width: 300px;
+            height: 300px;
+        }
+        .div {
+            border-width: 1px;
+            float:left;
+            margin-left: 25px;
+            width: 303px;
+            height: 400px;
+            border-color: black;
+            border-style: solid;
+            margin-top: 25px;
+        }
+        .a {
+        color: black;
+        }
+         .a:hover {
+        color: black;
+        text-decoration: none;
+        }
+    </style>
+</head>
    <h2>{{ heading }}</h2>
-    <ul>
         {% for listing in listings %}
-            <li><a href="{% url 'view_listing' listing_id=listing.id  %}"> {{ listing.name }}</a></li>
+        <div class="div"><a class="a" href="{% url 'view_listing' listing_id=listing.id  %}">
+             <p><img  class="image-front" src="{{ listing.image_url }}"></p>
+            <p>{{ listing.name }}</p>
+            <p>Starting bid price:{{ listing.starting_bid_price }}</p>
+        </a>
+        </div>
+
         {% endfor %}
-    </ul>
 
 {% endblock %}

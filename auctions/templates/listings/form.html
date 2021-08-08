@@ -5,13 +5,40 @@ Create a new listing
 {% endblock %}
 
 {% block body %}
+
+    <style>
+
+         button:hover {
+             background-color: #005960;
+             color: white;
+         }
+         button {
+             background-colour: default;
+             border-radius: 10%;
+             margin-right: 0.7rem;
+             padding: 0.5rem 1rem 0.5rem 1rem;
+         }
+         form{
+            display:grid;
+            width:80%;
+         }
+         input, select, textarea{
+            margin-bottom:1rem;
+            }
+           buttonrow{
+             margin: 1rem 0 0 0;
+           }
+    </style>
+
 <h1>Enter Details:</h1>
 
 <form method="POST">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
+    {{ form.as_table }}
+    <div class="bottonrow">
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </div>
 </form>
 
 {% endblock %}

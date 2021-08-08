@@ -12,13 +12,55 @@
     {% endfor %}
 </ul>
 {% endif %}
-<p><img src="{{ listing_obj.image_url }}"></p>
 <style>
     .drelement{
         display: inline-block
     }
+    img {
+        height: 300px;
+        width: 350px;
+        border-color: black;
+        border-width: 10px;
+        border-width: 1px;
+        border-color: black;
+        border-style: solid;
+        }
+    button:hover {
+        background-color: #005960;
+        color: white;
+}
+    button {
+    background-colour: default;
+    border-radius: 10%;
+}
+    #id_description {
+    height: 50px;
+    width: 200px;
+    }
+    .dr {
+    padding: 0.4rem;
+    border-width: 2px;
+    border-color: black;
+    border-style: solid;
+    width: 500px;
+    overflow-wrap: anywhere;
+    }
+    .image {
+    float: left;
+    margin left: 5px;
+    margin-right:5px;}
+
+    .data{
+       display: grid;
+       grid-template-columns: auto 40% 35%;
+    }
 </style>
-<div class="dv">
+<div class="data">
+<div class="part1 image">
+<p class="image"><img src="{{ listing_obj.image_url }}"></p>
+{% if user.is_authenticated and listing_obj.status == "A" %}
+</div>
+<div class="dv part2">
 {% for f in listing_obj.get_all_fields %}
 <div class="dr" display="grid">
  <label for="{{ f.label }}" class="drelement detailvaluelabel"><dt> {{f.label|capfirst}}</dt></label>
@@ -29,7 +71,7 @@
 </div>
 {% endfor %}
 </div>
-{% if user.is_authenticated and listing_obj.status == "A" %}
+<div class="part3">
     <p>
         {% if listingOnUserWatchList %}
         <form action="{% url 'remove_watchlist'%}" method="post">
@@ -47,12 +89,12 @@
     </p>
     <p>
         {% if user == listing_obj.created_by %}
-            <a href="/listing/{{listing_obj.id}}/close-bid/">Close bid</a>
+            <a href="/listing/{{listing_obj.id}}/close-bid/"><button>Close bid</button></a>
         {% else %}
         <form action="{% url 'submit_bid'%}" method="post">
             {% csrf_token %}
             {{ bid_form }}
-            <button type="submit">Bid</button>
+            <button type="submit">$ Place your bid $</button>
         </form>
         {% endif %}
     </p>
@@ -63,9 +105,11 @@
 <form action="{% url 'post_comment'%}" method="post">
         {% csrf_token %}
         {{ comment_form }}
-        <button type="submit">comment</button>
+        <button type="submit">Comment</button>
 </form>
 {% for comment in listing_obj.comments_listing.all %}
     {{ comment }}
 {% endfor %}
+</div>
+</div>
 {% endblock %}

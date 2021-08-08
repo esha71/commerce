@@ -75,9 +75,10 @@ class Category(Base):
 
 class Listing(Base):
     name = models.CharField(max_length=30,)
-    description = models.TextField()
+    last_high_bid = models.OneToOneField('Bids', related_name='%(class)s_current_high_bid', on_delete=models.DO_NOTHING,
+                                         null=True, blank=True)
     starting_bid_price = models.DecimalField(max_digits=12, decimal_places=2)
-    last_high_bid = models.OneToOneField('Bids', related_name='%(class)s_current_high_bid', on_delete=models.DO_NOTHING, null=True, blank=True)
+    description = models.TextField()
     status = models.CharField(max_length=1,
                               choices=[("A", "Active"), ("C", "Closed"), ("D", "Discontinued")],
                               default="A", )

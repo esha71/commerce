@@ -58,7 +58,6 @@
 <div class="data">
 <div class="part1 image">
 <p class="image"><img src="{{ listing_obj.image_url }}"></p>
-{% if user.is_authenticated and listing_obj.status == "A" %}
 </div>
 <div class="dv part2">
 {% for f in listing_obj.get_all_fields %}
@@ -72,6 +71,7 @@
 {% endfor %}
 </div>
 <div class="part3">
+    {% if user.is_authenticated and listing_obj.status == "A" %}
     <p>
         {% if listingOnUserWatchList %}
         <form action="{% url 'remove_watchlist'%}" method="post">

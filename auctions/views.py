@@ -48,6 +48,7 @@ class ListingForm(ModelForm):
 class CommentsForm(ModelForm):
     listing_id = forms.CharField(widget=forms.HiddenInput(), required=False)
     created_by = forms.CharField(widget=forms.HiddenInput(), disabled=True, required=False  )
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Please write your comments'}))
 
     class Meta:
         model = Comments
@@ -59,6 +60,7 @@ class CommentsForm(ModelForm):
 class BidForm(ModelForm):
     listing_id = forms.CharField(widget = forms.HiddenInput(), required = False)
     listing_on_watchlist = forms.BooleanField(widget = forms.HiddenInput(), required = False)
+    bid_price = forms.DecimalField(required=True, widget=forms.TextInput(attrs={'placeholder': 'Your bid price'}))
     # listing = forms.ChoiceField(widget=forms.HiddenInput(), required=False)
 
     class Meta:

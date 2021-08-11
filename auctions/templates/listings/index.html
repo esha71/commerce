@@ -35,7 +35,11 @@
         <div class="div"><a class="a" href="{% url 'view_listing' listing_id=listing.id  %}">
              <p><img  class="image-front" src="{{ listing.image_url }}"></p>
             <p>{{ listing.name }}</p>
-            <p>Starting bid price:{{ listing.starting_bid_price }}</p>
+            {% if listing.last_high_bid.bid_price %}
+             <p> Current bid price: {{listing.last_high_bid.bid_price}}</p>
+            {% else %}
+                <p>Starting bid price:{{ listing.starting_bid_price }}</p>
+            {% endif %}
         </a>
         </div>
 

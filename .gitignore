@@ -6,3 +6,4 @@ env
 .coverage
 db.sqlite3
 migrations
+.idea

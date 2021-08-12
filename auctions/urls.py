@@ -12,13 +12,7 @@ urlpatterns = [
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
     path("listings/active/", views.active_listings, name="active_listing"),
-    # path("listings/active/", generic.ListView.as_view(
-    #     model=listings,
-    #     paginate_by="10",
-    #     queryset=listings.objects.filter(status="A"),
-    #     context_object_name="listings",
-    #     template_name="listings/index.html"
-    # ), name="active_listing"),
+
     path("newlisting", views.new_listing, name="new_listing"),
     path("listing/<int:listing_id>/", views.view_listing, name="view_listing"),
     path("listing/<int:listing_id>/edit", views.edit_listing, name="edit_listing"),

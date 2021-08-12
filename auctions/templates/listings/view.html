@@ -114,12 +114,12 @@
     </div>
     <div class="dv part2">
         {% for f in listing_obj.get_all_fields %}
-        <div class="dr" display="grid">
+        <div class="dr">
             <label for="{{ f.label }}" class="drelement detailvaluelabel">
                 <dt> {{f.label|capfirst}}</dt>
             </label>
             <div class="drelement detailseparator">:</div>
-            <div class="drelement detailvalue">
+            <div class="drelement detailvalue" id="{{ f.label }}">
                 {{f.value|escape|urlize|linebreaks}}
             </div>
         </div>
@@ -163,12 +163,13 @@
             {{ bid_form }}
             <button type="submit">$ Place your bid $</button>
         </form>
+        {% endif %}
         <form class="comment_form form" action="{% url 'post_comment'%}" method="post">
             {% csrf_token %}
             {{ comment_form }}
             <button type="submit">Post comment</button>
         </form>
-        {% endif %}
+
         </p>
         {% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
         You are the winner!!!
@@ -176,7 +177,7 @@
 
 
         <hr class="hr">
-        {% for comment in listing_obj.comments_listing.all %}
+        {% for comment in listing_obj.comments_listing.all.reverse %}
         <div class="comment">
             <div class="comment_part1">
                 <div class="comment_created_by"><p class="created_by"><strong>{{ comment.created_by }}</strong></p>

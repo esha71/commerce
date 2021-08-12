@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 # .gitignore
+=======
+#.gitignore
+>>>>>>> 6f955dc76a5c0140fe5ccd8d1b665c12c6a50fc0
 __pycache__
 venv
 env
 .pytest_cache
 .coverage
 db.sqlite3
+<<<<<<< HEAD
 migrations
 .idea
+=======
+migrations
+>>>>>>> 6f955dc76a5c0140fe5ccd8d1b665c12c6a50fc0

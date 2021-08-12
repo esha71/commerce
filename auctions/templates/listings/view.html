@@ -5,14 +5,34 @@
 {% endblock %}
 
 {% block body %}
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-    {% endfor %}
-</ul>
-{% endif %}
 <style>
+    ul{
+        list-style: none;
+    }
+    .errorlist {
+    border-width: 1px;
+    border-color: red;
+    border-style: solid;
+    width: 300px;
+    background-color: #ff8e8e;
+    font-weight: 10px;
+    text-transform: lowercase;
+    }
+    .errorlist:first-letter {
+    text-transform: uppercase;
+    }
+    .info {
+    border-width: 1px;
+    border-color: green;
+    border-style: solid;
+    width: 300px;
+    background-color: #b6ff8c;
+    text-align: center;
+    text-transform: lowercase
+    }
+    .info:first-letter {
+    text-transform: uppercase;
+    }
     .drelement{
         display: inline-block
     }
@@ -54,6 +74,38 @@
        display: grid;
        grid-template-columns: auto 40% 35%;
     }
+    .comment {
+    margin-bottom: 5px;
+    }
+    .hr {
+    background-color: black;
+    }
+    .label_comment_description {
+    float: left;
+    }
+    .comment_description {
+    padding: 0 0 0 1rem;
+    }
+    .comment_date_created {
+    size: 12px;
+    color: gray;
+    float: left;
+    }
+    .comment_part1{
+        display:flex;
+    }
+    .created_by {
+    font-size: 17px;
+
+    }
+    .comment_created_by {
+    padding: 0rem 1rem;
+    }
+    label{
+        display:none;
+    }
+
+
 </style>
 <div class="data">
 <div class="part1 image">
@@ -71,7 +123,18 @@
 {% endfor %}
 </div>
 <div class="part3">
+<<<<<<< HEAD
     {% if user.is_authenticated and listing_obj.status == "A" %}
+=======
+{% if messages %}
+<ul class="messages" xmlns="http://www.w3.org/1999/html">
+    {% for message in messages %}
+    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+>>>>>>> 6f955dc76a5c0140fe5ccd8d1b665c12c6a50fc0
     <p>
         {% if listingOnUserWatchList %}
         <form action="{% url 'remove_watchlist'%}" method="post">
@@ -105,10 +168,22 @@
 <form action="{% url 'post_comment'%}" method="post">
         {% csrf_token %}
         {{ comment_form }}
-        <button type="submit">Comment</button>
+        <button type="submit">Post comment</button>
 </form>
+    <hr class="hr">
 {% for comment in listing_obj.comments_listing.all %}
-    {{ comment }}
+<div class="comment">
+    <div class="comment_part1">
+        <div class="comment_created_by"> <p class="created_by"><strong>{{ comment.created_by }}</strong></p></div>
+        <div class="comment_date_created">{{ comment.created_on }}</div>
+    </div>
+
+    <div class="comment_description"><p>{{ comment.description }}</p> </div>
+
+    <hr class="hr">
+</div>
+
+
 {% endfor %}
 </div>
 </div>

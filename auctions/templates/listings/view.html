@@ -6,6 +6,12 @@
 
 {% block body %}
 <style>
+    .dmargin{
+        margin: 0.4rem;
+    }
+    .hmargin{
+        margin: 0 0.4rem;
+    }
     ul{
         list-style: none;
     }
@@ -37,8 +43,8 @@
         display: inline-block
     }
     img {
-        height: 300px;
-        width: 350px;
+        max-height: 300px;
+        max-width: 350px;
         border-color: black;
         border-width: 10px;
         border-width: 1px;
@@ -54,25 +60,22 @@
     border-radius: 10%;
 }
     #id_description {
-    height: 50px;
-    width: 200px;
+        height: 50px;
     }
     .dr {
     padding: 0.4rem;
     border-width: 2px;
     border-color: black;
     border-style: solid;
-    width: 500px;
     overflow-wrap: anywhere;
     }
     .image {
-    float: left;
-    margin left: 5px;
-    margin-right:5px;}
+        float: left;
+    }
 
     .data{
        display: grid;
-       grid-template-columns: auto 40% 35%;
+       grid-template-columns: auto 40% auto;
     }
     .comment {
     margin-bottom: 5px;
@@ -104,80 +107,83 @@
     label{
         display:none;
     }
+    .comment_form{
+        display: flex;
+        vertical-align: middle;
+        align-items: center;
+     }
 
 
 </style>
 <div class="data">
-    <div class="part1 image">
+    <div class="part1 image dmargin">
         <p class="image"><img src="{{ listing_obj.image_url }}"></p>
     </div>
-    <div class="dv part2">
+    <div class="dv part2 dmargin">
         {% for f in listing_obj.get_all_fields %}
         <div class="dr">
             <label for="{{ f.label }}" class="drelement detailvaluelabel">
-                <dt> {{f.label|capfirst}}</dt>
+                <dt> {{f.label|capfirst}} :</dt>
             </label>
-            <div class="drelement detailseparator">:</div>
             <div class="drelement detailvalue" id="{{ f.label }}">
                 {{f.value|escape|urlize|linebreaks}}
             </div>
         </div>
         {% endfor %}
     </div>
-    <div class="part3">
+    <div class="part3 dmargin">
 
         {% if user.is_authenticated and listing_obj.status == "A" %}
 
         {% if messages %}
-        <ul class="messages" xmlns="http://www.w3.org/1999/html">
+        <ul class="messages dmargin" xmlns="http://www.w3.org/1999/html">
             {% for message in messages %}
             <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</li>
             {% endfor %}
         </ul>
         {% endif %}
 
-        <p>
-            {% if listingOnUserWatchList %}
-        <form action="{% url 'remove_watchlist'%}" method="post">
+        {% if listingOnUserWatchList %}
+        <form class="dmargin" action="{% url 'remove_watchlist'%}" method="post">
             {% csrf_token %}
             <input type="text" name="id" value="{{listing_obj.id}}" hidden>
             <button> Remove from Watchlist</button>
         </form>
         {% else %}
-        <form action="{% url 'add_watchlist'%}" method="post">
+        <form class="dmargin" action="{% url 'add_watchlist'%}" method="post">
             {% csrf_token %}
             <input type="text" name="id" value="{{listing_obj.id}}" hidden>
             <button> Add to Watchlist</button>
         </form>
         {% endif %}
-        </p>
-        <p>
-            {% if user == listing_obj.created_by %}
-            <a href="/listing/{{listing_obj.id}}/close-bid/">
+
+
+        {% if user == listing_obj.created_by %}
+            <a class="dmargin" href="/listing/{{listing_obj.id}}/close-bid/">
                 <button>Close bid</button>
             </a>
             {% else %}
-        <form class="bid_form form" action="{% url 'submit_bid'%}" method="post">
+        <form class="bid_form dmargin" action="{% url 'submit_bid'%}" method="post">
             {% csrf_token %}
             {{ bid_form }}
             <button type="submit">$ Place your bid $</button>
         </form>
         {% endif %}
-        <form class="comment_form form" action="{% url 'post_comment'%}" method="post">
+        <form class="comment_form dmargin" action="{% url 'post_comment'%}" method="post">
             {% csrf_token %}
             {{ comment_form }}
-            <button type="submit">Post comment</button>
+            <button class="hmargin" type="submit">Post comment</button>
         </form>
 
-        </p>
+
         {% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
         You are the winner!!!
         {% endif %}
 
 
-        <hr class="hr">
+        <hr class="hr dmargin">
         {% for comment in listing_obj.comments_listing.all.reverse %}
-        <div class="comment">
+        <div class="comment dmargin">
             <div class="comment_part1">
                 <div class="comment_created_by"><p class="created_by"><strong>{{ comment.created_by }}</strong></p>
                 </div>

@@ -48,7 +48,7 @@ class ListingForm(ModelForm):
 class CommentsForm(ModelForm):
     listing_id = forms.CharField(widget=forms.HiddenInput(), required=False)
     created_by = forms.CharField(widget=forms.HiddenInput(), disabled=True, required=False  )
-    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Please write your comments'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'placeholder': 'Please write your comments', 'cols':'38','rows':'10'}))
 
     class Meta:
         model = Comments

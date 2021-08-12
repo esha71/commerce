@@ -106,84 +106,91 @@
     }
 
 
+
 </style>
 <div class="data">
-<div class="part1 image">
-<p class="image"><img src="{{ listing_obj.image_url }}"></p>
-</div>
-<div class="dv part2">
-{% for f in listing_obj.get_all_fields %}
-<div class="dr" display="grid">
- <label for="{{ f.label }}" class="drelement detailvaluelabel"><dt> {{f.label|capfirst}}</dt></label>
-    <div class="drelement detailseparator">:</div>
-    <div class="drelement detailvalue">
-      {{f.value|escape|urlize|linebreaks}}
+    <div class="part1 image">
+        <p class="image"><img src="{{ listing_obj.image_url }}"></p>
     </div>
-</div>
-{% endfor %}
-</div>
-<div class="part3">
+    <div class="dv part2">
+        {% for f in listing_obj.get_all_fields %}
+        <div class="dr" display="grid">
+            <label for="{{ f.label }}" class="drelement detailvaluelabel">
+                <dt> {{f.label|capfirst}}</dt>
+            </label>
+            <div class="drelement detailseparator">:</div>
+            <div class="drelement detailvalue">
+                {{f.value|escape|urlize|linebreaks}}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="part3">
 
-    {% if user.is_authenticated and listing_obj.status == "A" %}
+        {% if user.is_authenticated and listing_obj.status == "A" %}
 
-{% if messages %}
-<ul class="messages" xmlns="http://www.w3.org/1999/html">
-    {% for message in messages %}
-    <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
-    {% endfor %}
-</ul>
-{% endif %}
+        {% if messages %}
+        <ul class="messages" xmlns="http://www.w3.org/1999/html">
+            {% for message in messages %}
+            <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
 
-    <p>
-        {% if listingOnUserWatchList %}
+        <p>
+            {% if listingOnUserWatchList %}
         <form action="{% url 'remove_watchlist'%}" method="post">
             {% csrf_token %}
             <input type="text" name="id" value="{{listing_obj.id}}" hidden>
-            <button> Remove from Watchlist </button>
+            <button> Remove from Watchlist</button>
         </form>
         {% else %}
         <form action="{% url 'add_watchlist'%}" method="post">
             {% csrf_token %}
             <input type="text" name="id" value="{{listing_obj.id}}" hidden>
-            <button> Add to Watchlist </button>
+            <button> Add to Watchlist</button>
         </form>
         {% endif %}
-    </p>
-    <p>
-        {% if user == listing_obj.created_by %}
-            <a href="/listing/{{listing_obj.id}}/close-bid/"><button>Close bid</button></a>
-        {% else %}
-        <form action="{% url 'submit_bid'%}" method="post">
+        </p>
+        <p>
+            {% if user == listing_obj.created_by %}
+            <a href="/listing/{{listing_obj.id}}/close-bid/">
+                <button>Close bid</button>
+            </a>
+            {% else %}
+        <form class="bid_form form" action="{% url 'submit_bid'%}" method="post">
             {% csrf_token %}
             {{ bid_form }}
             <button type="submit">$ Place your bid $</button>
         </form>
+        <form class="comment_form form" action="{% url 'post_comment'%}" method="post">
+            {% csrf_token %}
+            {{ comment_form }}
+            <button type="submit">Post comment</button>
+        </form>
         {% endif %}
-    </p>
-{% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
-    You are the winner!!!
-{% endif %}
+        </p>
+        {% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
+        You are the winner!!!
+        {% endif %}
 
-<form action="{% url 'post_comment'%}" method="post">
-        {% csrf_token %}
-        {{ comment_form }}
-        <button type="submit">Post comment</button>
-</form>
-    <hr class="hr">
-{% for comment in listing_obj.comments_listing.all %}
-<div class="comment">
-    <div class="comment_part1">
-        <div class="comment_created_by"> <p class="created_by"><strong>{{ comment.created_by }}</strong></p></div>
-        <div class="comment_date_created">{{ comment.created_on }}</div>
+
+        <hr class="hr">
+        {% for comment in listing_obj.comments_listing.all %}
+        <div class="comment">
+            <div class="comment_part1">
+                <div class="comment_created_by"><p class="created_by"><strong>{{ comment.created_by }}</strong></p>
+                </div>
+                <div class="comment_date_created">{{ comment.created_on }}</div>
+            </div>
+
+            <div class="comment_description"><p>{{ comment.description }}</p></div>
+
+            <hr class="hr">
+        </div>
+
+
+        {% endfor %}
     </div>
-
-    <div class="comment_description"><p>{{ comment.description }}</p> </div>
-
-    <hr class="hr">
-</div>
-
-
-{% endfor %}
-</div>
 </div>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block title %}
-    active listing to bid
+active listing to bid
 {% endblock %}
 
 {% block body %}
@@ -11,38 +11,53 @@
             width: 300px;
             height: 300px;
         }
-        .div {
-            border-width: 1px;
+        .listings {
+            display: table-cell;
             float:left;
-            margin-left: 25px;
+            margin: 0 2% 2% 0;
             width: 303px;
-            height: 400px;
+            height: 480px;
+            border-width: 1px;
             border-color: black;
             border-style: solid;
-            margin-top: 25px;
+        }
+        .listing_details{
+            padding: 0.5rem;
         }
         .a {
-        color: black;
+            color: black;
         }
          .a:hover {
-        color: black;
-        text-decoration: none;
+            color: black;
+            text-decoration: none;
         }
+        .wrap3line{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-align: justify;
+       }
     </style>
 </head>
-   <h2>{{ heading }}</h2>
-        {% for listing in listings %}
-        <div class="div"><a class="a" href="{% url 'view_listing' listing_id=listing.id  %}">
-             <p><img  class="image-front" src="{{ listing.image_url }}"></p>
+<h2>{{ heading }}</h2>
+{% for listing in listings %}
+<div class="listings">
+    <a class="a" href="{% url 'view_listing' listing_id=listing.id  %}">
+        <img class="image-front" src="{{ listing.image_url }}">
+        <div class="listing_details">
             <p>{{ listing.name }}</p>
             {% if listing.last_high_bid.bid_price %}
-             <p> Current bid price: {{listing.last_high_bid.bid_price}}</p>
+            <p> Current bid price: {{listing.last_high_bid.bid_price}}</p>
             {% else %}
-                <p>Starting bid price:{{ listing.starting_bid_price }}</p>
+            <p>Starting bid price:{{ listing.starting_bid_price }}</p>
             {% endif %}
-        </a>
+            <p class="wrap3line"> {{ listing.description }} </p>
         </div>
+    </a>
+</div>
 
-        {% endfor %}
+{% endfor %}
 
 {% endblock %}

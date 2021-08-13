@@ -69,7 +69,7 @@ class Category(Base):
     name = models.CharField(max_length=30, unique=True)
 
     def __str__(self):
-        return self.id.__str__() + ":" + self.name
+        return self.name
 
 
 

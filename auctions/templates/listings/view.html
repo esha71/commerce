@@ -1,4 +1,5 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block title %}
 {{listing_obj.id}}:{{ listing_obj.name }}
@@ -11,6 +12,11 @@
     }
     .hmargin{
         margin: 0 0.4rem;
+    }
+    .vmargin{
+    }
+    button {
+        padding: 0.2rem 2rem;
     }
     ul{
         list-style: none;
@@ -28,13 +34,13 @@
     text-transform: uppercase;
     }
     .info {
-    border-width: 1px;
-    border-color: green;
-    border-style: solid;
-    width: 300px;
-    background-color: #b6ff8c;
-    text-align: center;
-    text-transform: lowercase
+        border-width: 1px;
+        border-color: green;
+        border-style: solid;
+        width: 100%;
+        background-color: #b6ff8c;
+        text-align: center;
+        text-transform: lowercase
     }
     .info:first-letter {
     text-transform: uppercase;
@@ -45,6 +51,8 @@
     img {
         max-height: 300px;
         max-width: 350px;
+        min-width: 250px;
+        width:100%;
         border-color: black;
         border-width: 10px;
         border-width: 1px;
@@ -84,7 +92,12 @@
     background-color: black;
     }
     .label_comment_description {
-    float: left;
+        float: left;
+    }
+    .comment_heading{
+        margin-top: 2rem;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
     .comment_description {
     padding: 0 0 0 1rem;
@@ -112,12 +125,28 @@
         vertical-align: middle;
         align-items: center;
      }
+     .winner_msg{
+          animation: blinker 1s linear infinite;
+        }
+
+        @keyframes blinker {
+          50% { opacity: 0; }
+        }
+       .messages{
+            padding:1rem 2rem;
+
+       }
+       .drelement{
+         vertical-align: top;
+       }
+
+
 
 
 </style>
 <div class="data">
     <div class="part1 image dmargin">
-        <p class="image"><img src="{{ listing_obj.image_url }}"></p>
+        <img src="{{ listing_obj.image_url }}">
     </div>
     <div class="dv part2 dmargin">
         {% for f in listing_obj.get_all_fields %}
@@ -136,11 +165,11 @@
         {% if user.is_authenticated and listing_obj.status == "A" %}
 
         {% if messages %}
-        <ul class="messages dmargin" xmlns="http://www.w3.org/1999/html">
+        <div class="messages dmargin">
             {% for message in messages %}
-            <li {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</li>
+            <div {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }}</div>
             {% endfor %}
-        </ul>
+        </div>
         {% endif %}
 
         {% if listingOnUserWatchList %}
@@ -177,26 +206,30 @@
 
 
         {% elif user.is_authenticated and listing_obj.status == "C" and user == listing_obj.last_high_bid.user %}
-        You are the winner!!!
+        <div class="winner_msg dmargin">
+            You are the winner!!!
+        </div>
+        <img src="{% static 'images/award.png' %}" alt="I am number 1">
         {% endif %}
 
 
         <hr class="hr dmargin">
-        {% for comment in listing_obj.comments_listing.all.reverse %}
+        <div class="comment_heading dmargin">Comments:</div>
         <div class="comment dmargin">
-            <div class="comment_part1">
-                <div class="comment_created_by"><p class="created_by"><strong>{{ comment.created_by }}</strong></p>
-                </div>
-                <div class="comment_date_created">{{ comment.created_on }}</div>
-            </div>
-
-            <div class="comment_description"><p>{{ comment.description }}</p></div>
-
             <hr class="hr">
+            {% for comment in listing_obj.comments_listing.all.reverse %}
+                <div class="comment_part1 vmargin">
+                    <div class="comment_created_by"><p class="created_by"><strong>{{ comment.created_by }}</strong></p>
+                    </div>
+                    <div class="comment_date_created">{{ comment.created_on }}</div>
+                </div>
+                <div class="comment_description"><p>{{ comment.description }}</p></div>
+            <hr class="hr">
+            {% empty %}
+                <div class="no_comments">No comments so far. Be the first one to write...</div>
+            {% endfor %}
         </div>
 
-
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

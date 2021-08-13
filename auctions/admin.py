@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 # Register your models here.
-from auctions.models import Category
+from auctions.models import Category, Bids, Listing, Watchlist, User, Comments
 
 
 class BaseAdmin(admin.ModelAdmin):
-    exclude = ('created_on', 'created_by', 'modified_by')
+    exclude = ('created_on', 'modified_on', 'modified_by')
 
 
     def save_model(self, request, obj, form, change):
@@ -17,6 +17,10 @@ class BaseAdmin(admin.ModelAdmin):
         return self.exclude
 
 
-@admin.register(Category)
-class ActivityAdmin(BaseAdmin):
-    pass
+
+#admin.site.register(User)
+admin.site.register(Category, BaseAdmin)
+admin.site.register(Bids, BaseAdmin)
+admin.site.register(Listing, BaseAdmin)
+#admin.site.register(Watchlist)
+admin.site.register(Comments, BaseAdmin)
